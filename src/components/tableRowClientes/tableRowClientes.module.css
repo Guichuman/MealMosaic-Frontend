@@ -1,0 +1,21 @@
+.tableRow {
+    background-color: var(--light-purple);
+  }
+  
+  .tableCell {
+    padding: 12px;
+    border-bottom: 2px solid var(--green);
+  }
+
+  .tableRow:hover{
+    transition: 0.2s ease-in-out;
+    background-color: var(--green);
+    cursor: pointer;
+  }
+
+  .tableRow td{
+    text-align: center;
+  }
+  
+  
+  

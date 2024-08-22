@@ -1,0 +1,205 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--light-purple);
+  height: 100vh;
+  padding: 4rem 2rem 4rem 18rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.containerPesquisa {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+}
+
+.inputCliente {
+  width: 40%; 
+  max-width: 500px;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.inputCliente::placeholder {
+  color: var(--dark-blue);
+  opacity: 1;
+}
+
+.inputCliente:focus {
+  border-color: var(--green);
+}
+
+.inputCliente:focus::-webkit-input-placeholder {
+  transition: 0.2s ease-in-out;
+  color: var(--green);
+}
+
+.tableCliente {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+}
+
+.tableCliente thead tr th:first-child {
+  border-top-left-radius: 10px;
+}
+
+.tableCliente thead tr th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.tableCliente td:first-child {
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.tableCliente td:last-child {
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.tableCliente th,
+.tableCliente td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+.tableCliente th {
+  background-color: var(--dark-blue);
+  color: #FFF;
+}
+
+.iconSearch {
+  position: absolute;
+  left: 49%;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  transition: 0.2s ease-in-out;
+}
+
+.inputCliente:focus ~ .iconSearch {
+  color: var(--green);
+}
+
+.btnFiltro {
+  display: flex;
+  padding: 0.6rem 0.8rem;
+  margin-left: 4rem;
+  background-color: var(--dark-blue);
+  color: var(--light-purple);
+  font-weight: 600;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnAdd {
+  padding: 0.6rem 0.8rem;
+  margin-left: 4rem;
+  background-color: var(--green);
+  font-weight: 600;
+}
+
+.btnAdd:hover,
+.btnFiltro:hover {
+  box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px,
+    rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+}
+
+.iconFilter {
+  font-size: 1.1rem;
+  margin-left: 0.8rem;
+}
+
+.containerContent {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.containerTable {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.containerStatistics {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 4rem 1rem 4rem 14rem;
+  }
+
+  .inputCliente {
+    width: 100%;
+  }
+
+  .btnFiltro,
+  .btnAdd {
+    margin-left: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .containerContent {
+    flex-direction: column;
+  }
+
+  .iconSearch{
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 4rem 1rem 4rem 12rem;
+  }
+
+  .iconSearch {
+    left: 90%;
+    font-size: 1.2rem;
+  }
+
+  .iconSearch{
+    display: none;
+  }
+
+  .btnFiltro,
+  .btnAdd {
+    margin-left: 0.5rem;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 4rem 0.5rem 4rem 10rem;
+  }
+
+  .iconSearch{
+    display: none;
+  }
+
+  .iconSearch {
+    left: 85%;
+    font-size: 1rem;
+  }
+
+  .btnFiltro,
+  .btnAdd {
+    flex: 100%;
+    margin: 0.5rem 0;
+  }
+
+  .containerStatistics {
+    margin-top: 1rem;
+  }
+}

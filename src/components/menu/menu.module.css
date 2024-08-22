@@ -1,0 +1,62 @@
+.sidebar {
+    height: 100vh;
+    background-color: var(--dark-blue);
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 20px;
+    transition: width 0.3s ease;
+  }
+  
+  .expanded {
+    width: 250px;
+  }
+  
+  .collapsed {
+    width: 80px;
+  }
+  
+  .toggleButton {
+    display: flex;
+    justify-content: center;
+    background-color: var(--dark-blue);
+    color: #fff;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .toggleButton:hover{
+    background-color: var(--green);
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    padding: 10px 20px;
+  }
+  
+  .collapsed ul li {
+    text-align: center;
+    padding: 10px 0;
+  }
+  
+  .collapsed ul li a {
+    padding: 10px 0;
+  }
+
+  .menuItem{
+    text-align: center;
+  }
+
+  .menuItem:hover{
+    background-color: var(--green);
+    transition: 0.2s ease-in;
+    cursor: pointer;
+  }
