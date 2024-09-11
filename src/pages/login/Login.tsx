@@ -29,6 +29,7 @@ const Login: React.FC = () => {
         password: password
       })
 
+
       const token = response.data.data.token
       const userId = response.data.data.userId
 
@@ -42,8 +43,6 @@ const Login: React.FC = () => {
       toast.error("Erro ao efetuar login")
     }
 
-    setEmail('')
-    setPassword('')
   }
 
   return (

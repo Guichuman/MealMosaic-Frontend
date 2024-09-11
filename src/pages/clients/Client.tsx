@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 import { IoFilter } from "react-icons/io5";
-import UserModal from "../../components/userModal/userModa";
+import UserModal from "../../components/userModal/userModal";
 import TableRowClientes from "../../components/tableRowClientes/TableRowClientes";
 import ConfirmationModal from "../../components/confirmationModal/ConfirmationModal";
 
@@ -121,6 +121,7 @@ const Client: React.FC = () => {
         ...clientData,
         id: clientData.id || "",
       });
+
       setModalOpen(true);
     } catch (error) {
       console.error("Error fetching client data:", error);
@@ -159,9 +160,9 @@ const Client: React.FC = () => {
           <table className={styles.tableCliente}>
             <thead>
               <tr>
-                <th style={{ width: 310 }}>Name</th>
+                <th style={{ width: 310 }}>Nome</th>
                 <th style={{ width: 210 }}>Email</th>
-                <th style={{ width: 150 }}>Phone</th>
+                <th style={{ width: 150 }}>Telefone</th>
                 <th style={{ width: 100 }}>Altura</th>
                 <th style={{ width: 91 }}>Peso</th>
                 <th style={{ width: 91 }}>Plano</th>

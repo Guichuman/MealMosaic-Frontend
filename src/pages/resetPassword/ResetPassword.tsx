@@ -11,6 +11,8 @@ const ResetPassword: React.FC = () => {
   const [email, setEmail] = useState('')
   const navigate = useNavigate();
 
+
+
   async function handleResetPassword(event: FormEvent){
     event.preventDefault()
 
@@ -21,17 +23,17 @@ const ResetPassword: React.FC = () => {
 
     const templateParams = {
       from_name: "MealMosaic",
-      to_name: email
+      to_name: email,
+      resetCode: '123456'
     }
 
-    emailjs.send("service_4jtlxty", "template_b6ievcy", templateParams, "b1tZXraACvNFDd2Hq")
-    .then((response) => {
+    try{
+      console.log(emailjs.send("service_4jtlxty", "template_b6ievcy", templateParams, "b1tZXraACvNFDd2Hq"))
       toast.success("Email de recuperação enviado!")
-    })
-    .catch((error) => {
+    }catch(error){
       toast.error("Erro ao enviar email")
-    })
-
+      throw new Error("Erro ao envair email")
+    }
     setEmail('')
 
   }

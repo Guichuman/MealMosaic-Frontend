@@ -3,12 +3,27 @@ import React, { FormEvent, useState, useEffect } from "react";
 import { setUpAPICLient } from "../../api/api";
 import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
-import Menu from "../../components/menu/Menu";
 import { GiSpoon } from "react-icons/gi";
 
 interface Client {
   id: string;
   name: string;
+}
+
+interface Alimento {
+  id: string;
+  name: string;
+}
+interface Food {
+  id: string;
+  name: string;
+  quantity: string;
+}
+
+interface Meal {
+  id: string;
+  foods: Food[];
+  time: string;
 }
 
 const CreateDiet: React.FC = () => {
@@ -21,6 +36,8 @@ const CreateDiet: React.FC = () => {
   const [clientId, setClientId] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
+  const [meals, setMeals] = useState<Meal[]>([]);
+  const [alimentos, setAlimentos] = useState<Alimento[]>([]);
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -30,11 +47,123 @@ const CreateDiet: React.FC = () => {
           return;
         }
         const response = await apiClient.get(`/clientes/${userId}`);
-        setClients(response.data.data)
+        setClients(response.data.data);
       } catch (error) {}
     };
+
+    const fetchAlimentos = async () => {
+      try {
+        const response = await apiClient.get("/alimento"); // Adjust the API endpoint accordingly
+        setAlimentos(response.data.data);
+      } catch (error) {
+        console.error("Erro ao buscar alimentos:", error);
+      }
+    };
+
     fetchClients();
+    fetchAlimentos();
   }, []);
+
+  const addMeal = () => {
+    setMeals([...meals, { id: Date.now().toString(), foods: [], time: "" }]);
+  };
+
+  const addFoodToMeal = (mealIndex: number) => {
+    const newMeals = meals.map((meal, index) =>
+      index === mealIndex
+        ? {
+            ...meal,
+            foods: [
+              ...meal.foods,
+              { id: Date.now().toString(), name: "", quantity: "" },
+            ],
+          }
+        : meal
+    );
+    setMeals(newMeals);
+  };
+
+  const updateMeal = (
+    index: number,
+    updatedMeal: {
+      id: string;
+      foods: { id: string; name: string; quantity: string }[];
+      time: string;
+    }
+  ) => {
+    const newMeals = meals.map((meal, i) =>
+      i === index
+        ? {
+            ...meal,
+            id: updatedMeal.id,
+            foods: updatedMeal.foods,
+            time: updatedMeal.time,
+          }
+        : meal
+    );
+
+    setMeals(newMeals);
+  };
+
+  const updateFoodInMeal = (
+    mealIndex: number,
+    foodIndex: number,
+    updatedFood: { id: string, name: string; quantity: string }
+  ) => {
+    const newMeals = meals.map((meal, index) =>
+      index === mealIndex
+        ? {
+            ...meal,
+            foods: meal.foods.map((food, i) =>
+              i === foodIndex ? { ...food, ...updatedFood } : food
+            ),
+          }
+        : meal
+    );
+    setMeals(newMeals);
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!clientId) {
+      toast.error("Por favor, selecione um cliente.");
+      return;
+    }
+
+    try {
+      const formattedDate = new Date(date).toISOString().split("T")[0];
+
+      const dietaResponse = await apiClient.post("/dieta", {
+        description: description,
+        date: formattedDate,
+        clientId: clientId,
+      });
+
+      const dietaId = dietaResponse.data.data.id;
+      
+      for (const meal of meals) {
+        const refeicaoResponse = await apiClient.post("/refeicao", {
+          dietaId,
+          horario: meal.time,
+        });
+        
+        const refeicaoId = refeicaoResponse.data.data.id;
+  
+        for (const food of meal.foods) {
+          await apiClient.post("/alimentoRefeicao", {
+            refeicaoId: refeicaoId,
+            alimentoId: food.id,
+            quantidadeTotal: food.quantity,
+          });
+        }
+      }
+
+      toast.success("Dieta salva com sucesso!");
+    } catch (error) {
+      console.error("Erro ao salvar a dieta:", error);
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -45,14 +174,18 @@ const CreateDiet: React.FC = () => {
           <select
             id="clientId"
             value={clientId}
-            onChange={(e) => setClientId(e.target.value)}
+            onChange={(e) => {
+              setClientId(e.target.value);
+            }}
             className={styles.input}
           >
             <option value="" disabled>
               Selecionar cliente
             </option>
             {clients.map((client) => (
-              <option key={client.id} value={client.id}>{client.name}</option>
+              <option key={client.id} value={client.id}>
+                {client.name}
+              </option>
             ))}
           </select>
         </div>
@@ -75,14 +208,80 @@ const CreateDiet: React.FC = () => {
             className={styles.input}
           />
         </div>
-      </form>
-      <div className={styles.containerRefs}>
-        <h1>Refeições</h1>
-        <button className={styles.btnAddRef}>
-          Adicionar refeição
-          <GiSpoon style={{ marginLeft: 3 }} />
+        <div className={styles.containerRefs}>
+          <h1>Refeições</h1>
+          <a className={styles.btnAddRef} onClick={addMeal}>
+            Adicionar refeição
+            <GiSpoon style={{ marginLeft: 3 }} />
+          </a>
+        </div>
+        {meals.map((meal, mealIndex) => (
+          <div key={meal.id} className={styles.mealGroup}>
+            <label>Horário</label>
+            <input
+              type="time"
+              value={meal.time}
+              onChange={(e) =>
+                updateMeal(mealIndex, { ...meal, time: e.target.value })
+              }
+              className={styles.input}
+            />
+
+            {meal.foods.map((food, foodIndex) => (
+              <div key={food.id} className={styles.foodGroup}>
+                <label>Alimento</label>
+                <select
+                  value={food.id}
+                  onChange={(e) =>
+                    updateFoodInMeal(mealIndex, foodIndex, {
+                      ...food,
+                      id: e.target.value,
+                      name:
+                        alimentos.find(
+                          (alimento) => alimento.id === e.target.value
+                        )?.name || "",
+                    })
+                  }
+                  className={styles.input}
+                >
+                  <option value="" disabled>
+                    Selecione um alimento
+                  </option>
+                  {alimentos.map((alimento) => (
+                    <option key={alimento.id} value={alimento.id}>
+                      {alimento.name}
+                    </option>
+                  ))}
+                </select>
+                <label>Quantidade</label>
+                <input
+                  type="text"
+                  value={food.quantity}
+                  onChange={(e) =>
+                    updateFoodInMeal(mealIndex, foodIndex, {
+                      ...food,
+                      quantity: e.target.value,
+                    })
+                  }
+                  className={styles.input}
+                />
+              </div>
+            ))}
+
+            <button type="button" onClick={() => addFoodToMeal(mealIndex)}>
+              Adicionar Alimento
+            </button>
+          </div>
+        ))}
+
+        <button
+          type="button"
+          onClick={handleSubmit}
+          className={styles.submitButton}
+        >
+          Salvar Dieta
         </button>
-      </div>
+      </form>
     </div>
   );
 };

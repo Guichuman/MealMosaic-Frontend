@@ -79,7 +79,7 @@ const UserModal: React.FC<UserModalProps> = ({
   };
 
   return (
-    <div className={styles.modalOverlay}>
+    <div className={`${styles.modalOverlay} ${isOpen ? styles.modalOpen : ""}`}>
       <div className={styles.modalContent}>
         <h2 style={{ textAlign: "center", marginBottom: 20, marginTop: 10 }}>
           {initialData ? "Alterar Cliente" : "Adicionar Cliente"}

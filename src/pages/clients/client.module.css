@@ -89,8 +89,8 @@
   display: flex;
   padding: 0.6rem 0.8rem;
   margin-left: 4rem;
-  background-color: var(--dark-blue);
-  color: var(--light-purple);
+  background-color: #93a4b1;
+  color: var(--dark-blue);
   font-weight: 600;
   align-items: center;
   justify-content: center;
@@ -99,8 +99,17 @@
 .btnAdd {
   padding: 0.6rem 0.8rem;
   margin-left: 4rem;
+  color: var(--dark-blue);
   background-color: var(--green);
   font-weight: 600;
+}
+
+.btnAdd:hover{
+  background-color: var(--green-900);
+}
+
+.btnFiltro:hover{
+  background-color: var(--grey);
 }
 
 .btnAdd:hover,
@@ -133,6 +142,11 @@
   margin-top: 2rem;
 }
 
+.modalOverlay.modal-visible {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
 
 @media (max-width: 1024px) {
   .container {
